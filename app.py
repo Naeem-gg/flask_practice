@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import json
 from datetime import datetime
+from flask_mail import Mail
 
 
 with open('config.json', 'r') as j:
@@ -9,7 +10,16 @@ with open('config.json', 'r') as j:
 
 
 app = Flask(__name__)
+app.config.update(
+    MAIL_SERVER='smtp.mail.yahoo.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USE_TLS=False,
+    MAIL_USERNAME=jvars['yahoo_user'],
+    MAIL_PASSWORD=jvars['yahoo_pass']
 
+)
+mail = Mail(app)
 if jvars["local_server"]:
     app.config['SQLALCHEMY_DATABASE_URI'] = jvars["local_uri"]
 
@@ -51,6 +61,8 @@ def contact():
         entry = Contact(name=name, email=email, phone_num=phone, message=message, date=date)
         db.session.add(entry)
         db.session.commit()
+        mail.send_message("New message from "+name, sender=email, recipients=[jvars['yahoo_user']], body=message)
+
         # date = req
     # srno	name	email	phone_num	message	date
 
