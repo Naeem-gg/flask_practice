@@ -1,13 +1,27 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+import json
+from datetime import datetime
+
+
+with open('config.json', 'r') as j:
+    jvars = json.load(j)["vars"]
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://naeem:Navjivan@localhost/cleanblog'
+
+if jvars["local_server"]:
+    app.config['SQLALCHEMY_DATABASE_URI'] = jvars["local_uri"]
+
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = jvars["prod_uri"]
+
 db = SQLAlchemy(app)
 
 
-class Contacts(db.Model):
+class Contact(db.Model):
     # srno	name	email	phone_num	message	date
+
     srno = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=False, nullable=False)
     email = db.Column(db.String(50), unique=False, nullable=False)
@@ -18,12 +32,12 @@ class Contacts(db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", jvar=jvars)
 
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html", jvar=jvars)
 
 
 @app.route("/contact", methods=["GET", "POST"])
@@ -33,19 +47,19 @@ def contact():
         email = request.form.get('fmail')
         phone = request.form.get('fnum')
         message = request.form.get('fmsg')
-
-        entry = Contacts(name=name, email=email, phone_num=phone, message=message)
+        date = datetime.now()
+        entry = Contact(name=name, email=email, phone_num=phone, message=message, date=date)
         db.session.add(entry)
         db.session.commit()
         # date = req
     # srno	name	email	phone_num	message	date
 
-    return render_template("contact.html")
+    return render_template("contact.html", jvar=jvars)
 
 
 @app.route("/post")
 def posts():
-    return render_template("post.html")
+    return render_template("post.html", jvar=jvars)
 
 
 # app.run(debug=True)

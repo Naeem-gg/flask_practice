@@ -1,0 +1,14 @@
+{
+	"vars":
+	{
+		"local_server": "True",
+		"local_uri": "mysql://naeem:Navjivan@localhost/cleanblog",
+		"prod_uri": "mysql://naeem:Navjivan@localhost/cleanblog",
+		"tw_url": "https://twitter.com/naeemgg",
+		"fb_url": "https://facebook.com/naeemgg",
+		"title": "Naeem's Flask",
+		"github_url": "https://github.com/Naeem-gg",
+		"sub_title": "Learning flask with Google"
+
+	}
+}
