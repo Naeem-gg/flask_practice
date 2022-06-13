@@ -12,28 +12,32 @@
         </div>
     </header>
     <!-- Main Content-->
+    
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <!-- Post preview-->
 
-
+                {% for post in posts%}
                 <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Welcome to Flask’s documentation. Get started with Installation and then
-                            get an overview with the Quickstart. There is also a more detailed Tutorial that shows how
-                            to create a small but complete application with Flask</h2>
-                        <h3 class="post-subtitle">Learning flask</h3>
-                    </a>
+                    <a href="/post/{{post.slug}}">
+                        <h2 class="post-title">{{post.title}} </h2>
+                        <h3 class="post-subtitle">{{post.tagline}}</h3>
+                    </a>    
+                        <p>{{post.content[:200]}}...</p>
+                        <p>Posted by {{post.post_by}} on {{post.date}}</p>
+                    
 
                 </div>
                 <!-- Divider-->
                 <hr class="my-4"/>
                 <!-- Post preview-->
                 <!-- Pager-->
+                {% endfor %}
                 <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older
                     Posts →</a></div>
             </div>
         </div>
     </div>
+    
 {% endblock %}
