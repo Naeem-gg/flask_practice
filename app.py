@@ -59,9 +59,12 @@ def index():
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
     if request.method == "POST":
-        return "<h1>Logged in successfully"
-    else:
-        return render_template("admin.html", jvar=jvars)
+        if request.form.get("user")==jvars['username'] and request.form.get("pass")==jvars['password']:
+            return "<h1>Logged in successfully"
+        else:
+            return "<h1>FAILED LOGIN ATTEMPT!! TRY AGAIN</h1>"
+
+    return render_template("admin.html", jvar=jvars)
 
 
 @app.route("/about")
